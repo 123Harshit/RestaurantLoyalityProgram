@@ -61,6 +61,7 @@ export default class Checkout extends React.Component {
 		console.log(name);
 		this.setState({showMe:false, redeemed:true, currName: name});
 	}
+	
 	clearCart = () => {
 		localStorage.removeItem('cart');
 	}
@@ -71,7 +72,6 @@ export default class Checkout extends React.Component {
 		const n1 = "Butter Chicken";
 		const n2 = "Saag Paneer";
 		const n3 = "Gajar ka Halwa";
-		const redeemName = this.state.currName;
 		return (
 			<div className=" container">
 				<h1>Hii {this.state.name}, Just a step away from Delicious food</h1>
@@ -114,7 +114,7 @@ export default class Checkout extends React.Component {
 							{	products.map((product, index) => 
 								<div key={index}>
 										{
-											redeemName===product.name ? <div>
+											this.state.currName===product.name ? <div>
 												{
 													<p>	
 														{product.name} 
@@ -124,7 +124,6 @@ export default class Checkout extends React.Component {
 												}
 											</div>:<div>
 											<p>
-														{redeemName}
 														{product.name} 
 														<small> (quantity: {product.qty})</small>
 														<span className="float-right text-primary">Rs {product.qty * product.price}</span>			
