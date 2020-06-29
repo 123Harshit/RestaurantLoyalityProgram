@@ -18,7 +18,7 @@ export default class Checkout extends React.Component {
 			date : 'Click to see the date',
 			showMe : true,
 			redeemed : false,
-			currId: 0
+			currName: 0
 		}
 	}
 	componentWillMount() {
@@ -57,18 +57,21 @@ export default class Checkout extends React.Component {
 			}); 
 	}
 	
-	redeem=(id)=>{
-		console.log(id);
-		this.setState({showMe:false, redeemed:true, currId: id});
+	redeem=(name)=>{
+		console.log(name);
+		this.setState({showMe:false, redeemed:true, currName: name});
 	}
-
+	clearCart = () => {
+		localStorage.removeItem('cart');
+	}
 	render() {
 		if (!isAuthenticated()) return (<Redirect to="/login" />);
 		const { products, total } =  this.state;
 		const cnt = this.state.count;
-		const id1 = 1;
-		const id2 = 3;
-		const id3 = 12;
+		const n1 = "Butter Chicken";
+		const n2 = "Saag Paneer";
+		const n3 = "Gajar ka Halwa";
+		const redeemName = this.state.currName;
 		return (
 			<div className=" container">
 				<h1>Hii {this.state.name}, Just a step away from Delicious food</h1>
@@ -100,18 +103,18 @@ export default class Checkout extends React.Component {
 						<h4>Today is your second visit and you can redeem one dish among three items which are mentioned in the second visit entry in the loyalty program.</h4>
 						<hr/>
 						<h6>Butter Chicken</h6>
-						<button onClick={(id1)=>this.redeem(id1)}>Redeem</button>
+						<button onClick={(n1)=>this.redeem(n1)}>Redeem</button>
 						
 						<h6>Saag Paneer</h6>
-						<button onClick={(id2)=>this.redeem(id2)}>Redeem</button>
+						<button onClick={(n2)=>this.redeem(n2)}>Redeem</button>
 						
 						<h6>Gajar ka Halwa</h6>
-						<button onClick={(id3)=>this.redeem(id3)}>Redeem</button>
+						<button onClick={(n3)=>this.redeem(n3)}>Redeem</button>
 						{this.state.redeemed ? <div>
 							{	products.map((product, index) => 
 								<div key={index}>
 										{
-											this.state.currId===product.id ? <div>
+											redeemName===product.name ? <div>
 												{
 													<p>	
 														{product.name} 
@@ -121,6 +124,7 @@ export default class Checkout extends React.Component {
 												}
 											</div>:<div>
 											<p>
+														{redeemName}
 														{product.name} 
 														<small> (quantity: {product.qty})</small>
 														<span className="float-right text-primary">Rs {product.qty * product.price}</span>			
@@ -146,7 +150,7 @@ export default class Checkout extends React.Component {
 				
 				{ products.length ? <button className="btn btn-success float-right" onClick={() => alert('Proceed to Pay')}>Pay</button>: '' }
 				
-				<Link to="/"><button className="btn btn-danger float-right" style={{ marginRight: "10px" }}>Cancel</button></Link>
+				<Link to="/"><button className="btn btn-danger float-right" onClick={this.clearCart} style={{ marginRight: "10px" }}>Cancel</button></Link>
 				<br/><br/><br/>
 			</div>
 		);
